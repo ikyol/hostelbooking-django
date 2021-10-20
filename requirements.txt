@@ -1,0 +1,10 @@
+Django
+psycopg2-binary
+Pillow
+social-auth-app-django
+django-allauth
+django-crispy-forms
+django-recaptcha3
+django-simple-captcha
+celery
+python-decouple==3.4

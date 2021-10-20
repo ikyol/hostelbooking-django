@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<form method="post" action="#">
+    <a href="{% url 'homepage' %}">Back to Main Page</a>
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Book</button>
+</form>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+{% endblock %}

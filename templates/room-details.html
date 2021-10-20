@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <!-- Breadcrumb Section Begin -->
+    <div class="breadcrumb-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-text">
+                        <h2>Our Rooms</h2>
+                        <div class="bt-option">
+                            <a href="{% url 'homepage' %}">Home</a>
+                            <span>Rooms</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Room Details Section Begin -->
+    <section class="room-details-section spad">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-8">
+                    <div class="room-details-item">
+                        <img src="{{ hostel.image.url }}" alt="">
+                        <div class="rd-text">
+                            <div class="rd-title">
+                                <h3>{{ hostel.title }}</h3>
+                                <div class="rdt-right">
+                                    <div class="rating">
+                                        <i class="icon_star"></i>
+                                        <i class="icon_star"></i>
+                                        <i class="icon_star"></i>
+                                        <i class="icon_star"></i>
+                                        <i class="icon_star-half_alt"></i>
+                                    </div>
+                                    {% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
+                                    <a href="{% url 'hostel-update' hostel.id %}"><i class="fa fa-wrench"></i></a>
+                                    <a href="{% url 'hostel-delete' hostel.id %}"><i class="fa fa-trash"></i></a>
+                                    {% endif %}
+                                    {% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser or request.user.is_active%}
+                                    <a href="{% url 'booking' %}">Booking Now</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <h2>{{ hostel.price }}$<span>/Pernight</span></h2>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="r-o">Rooms:</td>
+                                        <td>{{ hostel.rooms }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="r-o">Capacity:</td>
+                                        <td>{{ hostel.guests }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="r-o">Bed:</td>
+                                        <td>King Beds</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="r-o">Services:</td>
+                                        <td>{{ hostel.services }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p class="f-para">{{ hostel.description }}</p>
+                        </div>
+                    </div>
+
+                    <div class="rd-reviews">
+                        <h4>Reviews</h4>
+                        {% for comment in hostel_comments %}
+                        <div class="review-item">
+                            <div class="ri-pic">
+                                <img src="{% static 'img/room/avatar/147140.png' %}" alt="">
+                            </div>
+                            <div class="ri-text">
+                                <span>{{ comment.add_time }}</span>
+                                <h5>{{ comment.author }}</h5>
+                                <p>{{ comment.comment }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="review-add">
+                        <h4>Add Review</h4>
+                        <form method="post" action="#" class="ra-form">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <span>{{ request.user }}</span>
+                                    {% csrf_token %}
+                                    {{ form }}
+<!--                                    <textarea placeholder="Your Review">{{ request.comment }}</textarea>-->
+                                    <button type="submit">Submit Now</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="room-booking">
+                        <h3>Your Reservation</h3>
+                        <form method="post" action="#">
+                            {% csrf_token %}
+                            <div class="check-date">
+                                <label for="date-out">Check Out:</label>
+                                <input type="text" class="date-input" id="date-out">
+                                <i class="icon_calendar"></i>
+                            </div>
+                            <div class="check-date">
+                                <label for="date-in">Check In:</label>
+                                <input type="text" class="date-input" id="date-in">
+                                <i class="icon_calendar"></i>
+                            </div>
+                            <a href="{% url 'booking' %}">Booking Now</a>
+                            <button  type="submit">Booking NOW</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Room Details Section End -->
+   {% endblock %}

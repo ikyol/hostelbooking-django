@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+{% block title %} Update Hostel {% endblock %}
+
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ hostel_form.as_p }}
+    <button type="submit" class="btn btn-warning">Update</button>
+
+</form>
+
+{% endblock %}
