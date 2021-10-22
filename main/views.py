@@ -9,8 +9,8 @@ from .forms import *
 
 class IsAuthorMixin(UserPassesTestMixin):
     def test_func(self):
-        post = self.get_object()
-        return self.request.user.is_authenticated and self.request.user == post.author
+        hostel = self.get_object()
+        return self.request.user.is_authenticated and self.request.user == hostel.author
 
 
 class MainPageView(ListView):
