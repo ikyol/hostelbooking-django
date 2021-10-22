@@ -8,3 +8,4 @@ django-recaptcha3
 django-simple-captcha
 celery
 python-decouple==3.4
+redis

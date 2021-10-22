@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import *
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .tasks import send_success_email
 
 
 # def register(request):
@@ -33,6 +34,11 @@ class SignUpView(CreateView):
     form_class = RegisterForm
     template_name = 'register.html'
     success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        form.save()
+        send_success_email.delay(form.instance.email)
+        return super().form_valid(form)
 
 
 def loginPage(request):
