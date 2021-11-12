@@ -26,13 +26,13 @@ class HostelDetailView(DetailView):
     pk_url_kwarg = 'id'
 
     form = CommentForm
-    form2 = BookingForm
 
     def post(self, request, *args, **kwargs):
         form = CommentForm(request.POST)
+
         if form.is_valid():
             hostel = self.get_object()
-            form.instance.user = request.user
+            form.instance.author = request.user
             form.instance.hostel = hostel
             form.save()
 
@@ -48,19 +48,6 @@ class HostelDetailView(DetailView):
             'hostel_comments': hostel_comments,
         })
         return context
-
-    # def post(self, request, *args, **kwargs):
-    #     form2 = BookingForm(request.POST)
-    #     if form2.is_valid():
-    #         hostel = self.get_object()
-    #         form2.instance.user = request.user
-    #         form2.instance.hostel = hostel
-    #         form2.save()
-    #
-    #         return redirect(reverse('room-detail', kwargs={
-    #             'id': hostel.id,
-    #         }))
-    #
 
 
 class HostelListView(ListView):
@@ -141,6 +128,11 @@ class BookingView(CreateView):
     form_class = BookingForm
     template_name = 'booking.html'
     pk_url_kwarg = 'id'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     def get_success_url(self):
         return reverse('homepage')

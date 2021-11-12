@@ -39,17 +39,7 @@ class CommentForm(ModelForm):
 
     class Meta:
         model = Comment
-        fields = ['comment', 'author']
-
-    # def __init__(self, *args, **kwargs):
-    #     self.request = kwargs.pop('request')
-    #     super(CommentForm, self).__init__(*args, **kwargs)
-    #
-    # def save(self):
-    #     data = self.cleaned_data
-    #     data['author'] = self.request.user
-    #     comment = Comment.objects.create(**data)
-    #     return comment
+        fields = ['comment']
 
 
 class BookingForm(ModelForm):
@@ -58,7 +48,11 @@ class BookingForm(ModelForm):
 
     class Meta:
         model = Book
-        fields = ['user', 'hostel', 'check_in', 'check_out']
+        fields = ['hostel', 'check_in', 'check_out']
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
+        super(BookingForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         check_in = self.cleaned_data.get('check_in')
@@ -68,5 +62,7 @@ class BookingForm(ModelForm):
         return self.cleaned_data
 
     def save(self):
-        is_book = Book.objects.create(**self.cleaned_data)
+        data = self.cleaned_data
+        data['user'] = self.request.user
+        is_book = Book.objects.create(**data)
         return is_book
