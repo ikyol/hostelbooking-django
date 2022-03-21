@@ -72,3 +72,20 @@ class Book(models.Model):
 
     def __str__(self):
         return f'From = {self.check_in.strftime("%d-%b-%Y %H:%M")} To = {self.check_out.strftime("%d-%b-%Y %H:%M")}'
+
+
+class Ratings(models.Model):
+    RATING_CHOICES = (
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')
+    hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, related_name='ratings')
+    ratings = models.IntegerField(choices=RATING_CHOICES, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.hostel} -> {self.ratings}'

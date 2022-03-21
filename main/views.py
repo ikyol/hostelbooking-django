@@ -1,6 +1,5 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from .models import *
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -136,3 +135,12 @@ class BookingView(CreateView):
 
     def get_success_url(self):
         return reverse('homepage')
+
+
+class RatingsView(CreateView):
+    model = Ratings
+    form_class = RatingsForm
+    template_name = 'rooms-detail.html'
+    context_object_name = 'ratings'
+    pk_url_kwarg = 'id'
+

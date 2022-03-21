@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from main.models import Hostel, Comment, Book
+from main.models import Hostel, Comment, Book, Ratings
 from captcha.fields import CaptchaField
 import datetime
 
@@ -66,3 +66,10 @@ class BookingForm(ModelForm):
         data['user'] = self.request.user
         is_book = Book.objects.create(**data)
         return is_book
+
+
+class RatingsForm(ModelForm):
+    class Meta:
+        model = Ratings
+        fields = ['user', 'hostel', 'ratings']
+
