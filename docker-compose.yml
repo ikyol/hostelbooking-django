@@ -1,10 +1,23 @@
 version: '3'
 
 services:
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    networks:
+      - web
+
+
   web:
     build: 
       context: ./
-      dockerfile: app/Dockerfile
+      dockerfile: Dockerfile
     command: >
       bash -c "python manage.py makemigrations &&
               python manage.py migrate &&
@@ -14,9 +27,9 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DB_NAME=hostel
-      - DB_USER=aikyol
-      - DB_PASSWORD=1
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
       - "POSTGRES_HOST_AUTH_METHOD=trust"
     depends_on:
       - db
@@ -24,24 +37,8 @@ services:
       - web
 
 
-  db:
-    image: postgres
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
-    environment:
-      - DB_NAME=hostel
-      - DB_USER=aikyol
-      - DB_PASSWORD=1
-      - "POSTGRES_HOST_AUTH_METHOD=trust"
-    networks:
-      - web
-
-
-
   redis:
     image: redis
-    ports: 
-      - "6379:6379"
     networks:
       - web
 
@@ -50,14 +47,14 @@ services:
     restart: always
     build:
       context: ./
-      dockerfile: app/Dockerfile
+      dockerfile: Dockerfile
     command: celery -A book worker -l info
     volumes:
       - .:/app
     environment:
-      - DB_NAME=hostel
-      - DB_USER=aikyol
-      - DB_PASSWORD=1
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
       - "POSTGRES_HOST_AUTH_METHOD=trust"
     depends_on:
       - redis
