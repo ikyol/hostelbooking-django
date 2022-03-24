@@ -21,6 +21,7 @@ services:
     command: >
       bash -c "python manage.py makemigrations &&
               python manage.py migrate &&
+              python manage.py collectstatic --noinput &&
               python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
@@ -62,8 +63,18 @@ services:
       - web
 
 
+  nginx:
+    build:
+      context: ./
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+
+
+
 networks:
   web:
     driver: bridge
 
-    

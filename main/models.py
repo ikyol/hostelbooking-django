@@ -48,6 +48,9 @@ class Hostel(models.Model):
     rating = models.IntegerField(choices=RATING_CHOICES, blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     image = models.ImageField(upload_to='images')
+    
+    class Meta:
+        ordering = ["-created_at"]
 
     def __str__(self):
         return self.title
@@ -58,6 +61,9 @@ class Comment(models.Model):
     hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, related_name='comment')
     comment = models.CharField(max_length=255)
     add_time = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ["-add_time"]
 
     def __str__(self):
         return self.comment

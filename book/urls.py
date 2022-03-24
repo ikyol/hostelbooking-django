@@ -10,7 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
     path('', include('main.urls')),
-    path('home/', MainPageView.as_view(), name='homepage'),
+    path('', MainPageView.as_view(), name='homepage'),
     path('accounts/', include('user.urls')),
     path('captcha', include('captcha.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
