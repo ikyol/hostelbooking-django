@@ -95,3 +95,6 @@ class Ratings(models.Model):
 
     def __str__(self):
         return f'{self.hostel} -> {self.ratings}'
+
+
+# @pre_save

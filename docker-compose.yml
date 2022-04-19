@@ -3,6 +3,9 @@ version: '3'
 services:
   db:
     image: postgres
+    container_name: db
+    env_file:
+      - .env
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
@@ -18,12 +21,16 @@ services:
     build: 
       context: ./
       dockerfile: Dockerfile
+    container_name: web
+    env_file:
+      - .env
     command: >
       bash -c "python manage.py makemigrations &&
               python manage.py migrate &&
               python manage.py collectstatic --noinput &&
               python manage.py runserver 0.0.0.0:8000"
     volumes:
+      # - static_volume:/home/app/web/staticfiles
       - .:/app
     ports:
       - "8000:8000"
@@ -40,12 +47,18 @@ services:
 
   redis:
     image: redis
+    env_file:
+      - .env
+    container_name: redis
     networks:
       - web
 
       
   celery:
     restart: always
+    container_name: celery
+    env_file:
+      - .env
     build:
       context: ./
       dockerfile: Dockerfile
@@ -63,21 +76,20 @@ services:
       - web
 
 
-  nginx:
-    build:
-      context: ./
-      dockerfile: Dockerfile.prod
-    ports:
-      - "80:80"
-    depends_on:
-      - web
-    networks:
-      - web
+  # nginx:
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile.prod
+  #   container_name: nginx-1-19-0
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - web
+  #   networks:
+  #     - web
+
     
-
-
 
 networks:
   web:
     driver: bridge
-
